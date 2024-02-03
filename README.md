@@ -3,7 +3,7 @@
 Welcome to the Background Remover project! This tool allows you to effortlessly replace backgrounds in images and videos, making it perfect for creating professional LinkedIn profile pictures and more.
 
 ## Demo
-
+[Catch a live demo on Hugging Face](https://huggingface.co/spaces/Pranay009/Background-Remove)
 ### Images
 
 Original Image | Generated Image
