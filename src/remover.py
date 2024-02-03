@@ -1,10 +1,7 @@
-import os
 from PIL import Image,ImageOps
-import cv2
-import logging
-import numpy as np
 from rembg import new_session
-
+import numpy as np
+import cv2
 
 class BackgroundRemover:
 
@@ -106,6 +103,39 @@ class BackgroundRemover:
         colored_image.paste(img, mask=img)
 
         return colored_image
+    
+    def process_video(self,frame,background_path):
+        """
+        Remove background to the image and replace with a selective background.
+
+        Args:
+            img_path: The first image path.
+            background_path: The background image path.
+            output_path :The directory where the file wile be saved. (optional)
+            save: Whether to save the file or not. (optional)
+
+        Returns:
+            PILImage: background removed image.
+        """
+
+
+        lst_imgs=[]
+        input = Image.fromarray(frame)
+        width, height=input.size
+        input=ImageOps.exif_transpose(input)
+        masks = self.session.predict(input)
+        for mask in masks:
+            cutout = self.putalpha_cutout(input, mask)
+            lst_imgs.append(cutout)
+        cutout=input
+        if len(lst_imgs) > 0:
+            cutout = self.get_concat_v_multi(lst_imgs)
+        
+        result = self.apply_background(input , background_path , width , height)
+        result = np.array(result)
+
+
+        return result
         
 
     def process(self,img_path,background_path,output_path="",save=False):
